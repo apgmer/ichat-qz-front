@@ -17,15 +17,15 @@
             <img src="/public/favicon.png" style="width: 64px;" alt="">
         </a>
         <ul class="right hide-on-med-and-down">
-            <li><a href="#">登录</a></li>
-            <li><a href="#">注册</a></li>
-            <li><a href="#">开始聊天</a></li>
+            <li><a href="/login">登录</a></li>
+            <li><a href="/register">注册</a></li>
+            <li><a href="/family">开始聊天</a></li>
         </ul>
 
         <ul id="nav-mobile" class="side-nav">
-            <li><a href="#">登录</a></li>
-            <li><a href="#">注册</a></li>
-            <li><a href="#">开始聊天</a></li>
+            <li><a href="/login">登录</a></li>
+            <li><a href="/register">注册</a></li>
+            <li><a href="/family">开始聊天</a></li>
         </ul>
         <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
     </div>
@@ -40,7 +40,7 @@
             </h5>
         </div>
         <div class="row center">
-            <a href="http://materializecss.com/getting-started.html" id="download-button"
+            <a href="/family" id="download-button"
                class="btn-large waves-effect waves-light orange">立即开始</a>
         </div>
         <br><br>

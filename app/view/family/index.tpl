@@ -38,6 +38,7 @@
         </li>
         <li class="bold active"><a href="/family" class="waves-effect waves-teal">家庭管理</a></li>
         <li class="bold "><a href="/family/chat" class="waves-effect waves-teal">开始聊天</a></li>
+        <li class="bold"><a href="/logout" class="waves-effect waves-teal">退出登录</a></li>
 
     </ul>
 </header>
