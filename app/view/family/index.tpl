@@ -92,8 +92,10 @@
                                         <i class="material-icons prefix">accessibility</i>
                                         <select name="role">
                                             <option value="" disabled selected>选择</option>
+                                            {% if ctx.session.user.role == '1' or ctx.session.user.role == '2'%}
                                             <option value="1">妈妈</option>
                                             <option value="2">爸爸</option>
+                                            {% endif %}
                                             <option value="3">儿子</option>
                                             <option value="4">女儿</option>
                                         </select>
@@ -142,7 +144,9 @@
                                 <br>
                                 {{ mem.phone }}
                             </p>
+                            {% if ctx.session.user.role == '1' or ctx.session.user.role == '2' %}
                             <a href="javascript:;" onclick="delMem('{{ mem.id }}')">删除</a>
+                            {% endif %}
                         </li>
 
                     {% else %}
