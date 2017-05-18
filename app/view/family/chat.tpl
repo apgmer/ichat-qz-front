@@ -98,6 +98,7 @@
             <style>
                 .video .remoteVideo {
                     width: 100%;
+                    max-height: 500px;
                 }
 
                 .video .localVideo {
