@@ -86,7 +86,7 @@
                     location.href = "/family"
                 }) // 4000 is the duration of the toast
             }else{
-                Materialize.toast('登录失败', 1000,'',function () {
+                Materialize.toast('登录失败,用户名密码错误 或 用户已经在线', 1000,'',function () {
                     window.location.reload();
                 }) // 4000 is the duration of the toast
             }
