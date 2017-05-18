@@ -23,20 +23,6 @@ module.exports = app => {
 
     app.get('/keepOnline','home.keepOnline')
 
-    // app.get('/chat', 'chat.showChatView');
-    // app.get('/logout', 'home.logout');
-    //
-    // app.get('/getLoginUser','home.getLoginUser')
-    //
-    // app.get('/notify', 'chat.showNotifyView');
-    //
-
-    //
-    // app.get('/friend/search', 'friend.friendSearch');
-    // app.get('/friend/addfriendreq', 'friend.addFriendReq'); //发送好友申请请求
-    // app.get('/friend/dealNotify', 'friend.dealNotify');
-    // app.get('/friend/doneNotify', 'friend.doneNotify');
-    //
     app.io.route('webrtcMsg', app.io.controllers.chat);
 
 };
