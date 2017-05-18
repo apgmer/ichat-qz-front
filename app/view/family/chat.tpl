@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="/public/materialize/css/materialize.min.css">
     <link rel="stylesheet" href="/public/css/ghpages-materialize.css">
+    <link rel="stylesheet" href="/public/layer/skin/default/layer.css">
 
 </head>
 <body>
@@ -41,6 +42,9 @@
 
     </ul>
 </header>
+<script>
+    var loginUserId = '{{ ctx.session.user.id }}'
+</script>
 <main>
     <div class="section" id="index-banner">
         <div class="container">
@@ -62,31 +66,52 @@
                     {% for mem in memInfos %}
 
                         {% if mem.familyUserEntity.id != ctx.session.user.id %}
-                        <li>
-                            <div class="collapsible-header">
-                                {% if mem.status == 'ONLINE' %}
-                                    <span class="new badge green" data-badge-caption="在线"></span>
-                                {% else %}
-                                    <span class="new badge red" data-badge-caption="离线"></span>
-                                {% endif %}
-                                {{ mem.familyUserEntity.nickname }}
-                            </div>
-                            <div class="collapsible-body">
-                                <button class="waves-effect waves-light btn"
-                                    {% if mem.status == 'OFFLINE' %}
-                                    disabled="disabled" {% endif %}>
-                                <i class="material-icons">phone</i>
-                                </button>
-                            </div>
-                        </li>
+                            <li>
+                                <div class="collapsible-header">
+                                    {% if mem.status == 'ONLINE' %}
+                                        <span class="new badge green" data-badge-caption="在线"></span>
+                                    {% else %}
+                                        <span class="new badge red" data-badge-caption="离线"></span>
+                                    {% endif %}
+
+                                    <span id="{{ mem.familyUserEntity.id }}">{{ mem.familyUserEntity.nickname }}</span>
+                                </div>
+                                <div class="collapsible-body">
+                                    <button class="waves-effect waves-light btn"
+                                            onclick="callTo('{{ mem.familyUserEntity.id }}')"
+                                            {% if mem.status == 'OFFLINE' %}
+                                        disabled="disabled" {% endif %}>
+                                        <i class="material-icons">phone</i>
+                                    </button>
+                                </div>
+                            </li>
                         {% endif %}
                     {% else %}
-                        暂无
+                        暂无 请添加家庭成员
                     {% endfor %}
 
                 </ul>
 
             </div>
+
+            <style>
+                .video .remoteVideo {
+                    width: 100%;
+                }
+
+                .video .localVideo {
+                    position: absolute;
+                    width: 25%;
+                    bottom: 100px;
+                    right: 25px;
+                }
+            </style>
+
+            <div class="col s9" id="chatPanel">
+
+            </div>
+
+
         </div>
     </div> <!-- End Container -->
 </main>
@@ -107,11 +132,38 @@
 <!--materialize js-->
 <script src="/public/materialize/js/materialize.min.js"></script>
 <script src="/public/js/init.js"></script>
+<script src="/public/socketio/socket.io-1.2.1.js"></script>
 
+<script src="/public/layer/layer.js"></script>
+
+<script>
+    var startCart = function (uid) {
+        $('#chatPanel').empty();
+        var name = $('#' + uid + '').text()
+        var ele =
+            '<div class="card grey darken-1">' +
+            '<div class="card-content white-text">' +
+            '<span class="card-title">与 '+name+' 聊天中</span>' +
+            '<div class="video">' +
+            '<video id="remoteVideo" class="remoteVideo" autoplay ></video>' +
+            '<video id="localVideo" class="localVideo" autoplay  style="max-height: 412px;"></video>' +
+            '</div>' +
+            '</div>' +
+            '<div class="card-action">' +
+            '<a href="#">挂断</a>' +
+            '</div>' +
+            '</div>'
+
+        $('#chatPanel').append(ele);
+    }
+</script>
+
+
+<script src="/public/js/chat_stand.js"></script>
 <script>
     setInterval(function () {
         $.get("/keepOnline")
-    },20000)
+    }, 20000)
 </script>
 
 </body>

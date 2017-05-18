@@ -21,7 +21,13 @@ module.exports = app => {
                 ctx.redirect("/");
             } else {
                 let res = yield ctx.service.family.getFamilyStatusInfos(ctx.session.user.familyId);
-                yield ctx.render('family/chat.tpl',{memInfos: res.data})
+                let data;
+                if (res.data.length == 1) {
+                    data = null;
+                } else {
+                    data = res.data
+                }
+                yield ctx.render('family/chat.tpl', {memInfos: data})
             }
         }
 
