@@ -47,6 +47,13 @@ socket.on('webrtcMsg', function (data) {
             isLogin = true;
             break;
 
+        case 'request':
+            handleRequest(jsonData)
+            break;
+        case 'ok':
+            handleOkReq(jsonData);
+            break;
+
         case 'offer':
             console.log("recv offer")
             handleOffer(jsonData.offer, jsonData.name);
@@ -69,11 +76,49 @@ socket.on('webrtcMsg', function (data) {
 });
 //
 let callTo = function (friendid) {
+    audio.play();
+    connectedUser = friendid
+    send({type: 'request',name:friendid})
 
+}
+
+let handleRequest = function (jsonData) {
+    audio.play();
+    if (!isLogin) {
+        alert('socket 服务器链接失败。')
+        audio.pause();
+        return;
+    }
+
+    layer.confirm('您的好友请求与您视频通话，是否接受', function (index) {
+        audio.pause()
+        layer.close(index);
+        startChat(jsonData.name);
+
+        send({
+            type: 'ok',
+            name: jsonData.name
+        })
+        handleLogin(isLogin,function () {
+
+        })
+
+    }, function (index) {
+        layer.close(index)
+        send({
+            name: jsonData.name,
+            type: "refuse"
+        });
+    });
+
+
+}
+let handleOkReq = function () {
+    let friendid = connectedUser
     startChat(friendid);
 
     isCallTo = true;
-    audio.play();
+    audio.pause();
 
     // 将自己的摄像头显示在屏幕上
     handleLogin(isLogin, function (isDone) {
@@ -100,10 +145,9 @@ let callTo = function (friendid) {
             }
         }
     });
-
-
 }
-//
+
+
 var constraints = window.constraints = {
     audio: true,
     video: true
@@ -140,7 +184,7 @@ let handleLogin = function (success, callback) {
 
             // yourConn = new webkitRTCPeerConnection(configuration);
 
-            if (!yourConn){
+            if (!yourConn) {
                 yourConn = new RTCPeerConnection(configuration);
             }
 
@@ -175,45 +219,67 @@ let handleLogin = function (success, callback) {
     }
 };
 
+// let handleOffer = function (offer, name) {
+//
+//
+//     if (!isCallTo) {
+//         audio.play();
+//         layer.confirm('您的好友请求与您视频通话，是否接受', function (index) {
+//             audio.pause()
+//             layer.close(index);
+//             startChat(name);
+//             handleLogin(isLogin, function (isDone) {
+//                 if (isDone) {
+//                     connectedUser = name;
+//                     yourConn.setRemoteDescription(new RTCSessionDescription(offer));
+//
+//                     //create an answer to an offer
+//                     yourConn.createAnswer(function (answer) {
+//                         yourConn.setLocalDescription(answer);
+//                         console.log('send answer')
+//                         send({
+//                             type: "answer",
+//                             answer: answer
+//                         });
+//
+//
+//                     }, function (error) {
+//                         console.log(error);
+//                         alert("Error when creating an answer");
+//                     });
+//
+//                 }
+//             })
+//         }, function (index) {
+//             layer.close(index)
+//             send({
+//                 name: name,
+//                 type: "refuse"
+//             });
+//         });
+//     }
+
+// };
 let handleOffer = function (offer, name) {
 
+    connectedUser = name;
+    yourConn.setRemoteDescription(new RTCSessionDescription(offer));
 
-    if (!isCallTo) {
-        audio.play();
-        layer.confirm('您的好友请求与您视频通话，是否接受', function (index) {
-            audio.pause()
-            layer.close(index);
-            startChat(name);
-            handleLogin(isLogin, function (isDone) {
-                if (isDone) {
-                    connectedUser = name;
-                    yourConn.setRemoteDescription(new RTCSessionDescription(offer));
-
-                    //create an answer to an offer
-                    yourConn.createAnswer(function (answer) {
-                        yourConn.setLocalDescription(answer);
-                        console.log('send answer')
-                        send({
-                            type: "answer",
-                            answer: answer
-                        });
-
-
-                    }, function (error) {
-                        console.log(error);
-                        alert("Error when creating an answer");
-                    });
-
-                }
-            })
-        }, function (index) {
-            layer.close(index)
-            send({
-                name: name,
-                type: "refuse"
-            });
+    //create an answer to an offer
+    yourConn.createAnswer(function (answer) {
+        yourConn.setLocalDescription(answer);
+        console.log('send answer')
+        send({
+            type: "answer",
+            answer: answer
         });
-    }
+
+
+    }, function (error) {
+        console.log(error);
+        alert("Error when creating an answer");
+    });
+
 
 };
 
@@ -235,7 +301,7 @@ let handleAnswer = function (answer) {
 };
 //when we got an ice candidate from a remote user
 let handleCandidate = function (candidate) {
-    if (!yourConn){
+    if (!yourConn) {
         yourConn = new RTCPeerConnection(configuration);
     }
     yourConn.addIceCandidate(new RTCIceCandidate(candidate));

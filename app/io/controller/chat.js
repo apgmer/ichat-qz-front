@@ -38,6 +38,23 @@ module.exports = () => {
                 socket.emit('webrtcMsg',JSON.stringify(d));
                 break;
 
+            case 'request':
+                let sr = _sockets[data.name]
+                if (sr !== null){
+                    sr.emit('webrtcMsg',JSON.stringify({
+                        type:'request',
+                        name:socket.webrtcname //当前名字
+                    }))
+                }
+                break;
+            case 'ok':
+                let so = _sockets[data.name];
+                if(null !== so){
+                    so.emit('webrtcMsg',JSON.stringify({
+                        type: "ok"
+                    }))
+                }
+                break;
 
             case 'offer':
 

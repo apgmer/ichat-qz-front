@@ -139,7 +139,7 @@
 <script src="/public/layer/layer.js"></script>
 
 <script>
-    var startCart = function (uid) {
+    var startChat = function (uid) {
         $('#chatPanel').empty();
         var name = $('#' + uid + '').text()
         var ele =
@@ -161,7 +161,7 @@
 </script>
 
 
-<script src="/public/js/chat_stand.js"></script>
+<script src="/public/js/chat_stand2.js"></script>
 <script>
     setInterval(function () {
         $.get("/keepOnline")
