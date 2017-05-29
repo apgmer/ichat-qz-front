@@ -78,11 +78,13 @@ socket.on('webrtcMsg', function (data) {
 let callTo = function (friendid) {
     audio.play();
     connectedUser = friendid
-    send({type: 'request',name:friendid})
+    send({type: 'request',name:friendid,isMobile:false})
 
 }
 
 let handleRequest = function (jsonData) {
+    console.log("ercv request " + jsonData)
+    console.log(jsonData)
     audio.play();
     if (!isLogin) {
         alert('socket 服务器链接失败。')
@@ -101,6 +103,32 @@ let handleRequest = function (jsonData) {
         })
         handleLogin(isLogin,function () {
 
+
+            if (!jsonData.isMobile){
+                let callToUsername = jsonData.name;
+
+                if (callToUsername.length > 0) {
+
+                    connectedUser = callToUsername;
+
+                    // create an offer
+                    yourConn.createOffer(function (offer) {
+                        console.log("create offer")
+                        send({
+                            type: "offer",
+                            offer: offer
+                        });
+
+                        yourConn.setLocalDescription(offer);
+                    }, function (error) {
+                        alert("Error when creating an offer");
+                    });
+
+
+                }
+            }
+
+
         })
 
     }, function (index) {
@@ -113,17 +141,18 @@ let handleRequest = function (jsonData) {
 
 
 }
-let handleOkReq = function () {
+let handleOkReq = function (jsonData) {
     let friendid = connectedUser
     startChat(friendid);
 
     isCallTo = true;
     audio.pause();
 
+    console.log("recv ok " + jsonData)
     // 将自己的摄像头显示在屏幕上
-    handleLogin(isLogin, function (isDone) {
-        if (isDone) {
-            //链接好友
+    handleLogin(isLogin, function () {
+
+        if (jsonData.isMobile){
             let callToUsername = friendid;
 
             if (callToUsername.length > 0) {
@@ -142,6 +171,8 @@ let handleOkReq = function () {
                 }, function (error) {
                     alert("Error when creating an offer");
                 });
+
+
             }
         }
     });
@@ -261,6 +292,7 @@ let handleLogin = function (success, callback) {
 
 // };
 let handleOffer = function (offer, name) {
+    console.log(offer)
 
     connectedUser = name;
     yourConn.setRemoteDescription(new RTCSessionDescription(offer));

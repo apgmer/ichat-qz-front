@@ -39,11 +39,13 @@ module.exports = () => {
                 break;
 
             case 'request':
+                console.log(data.isMobile)
                 let sr = _sockets[data.name]
                 if (sr !== null){
                     sr.emit('webrtcMsg',JSON.stringify({
                         type:'request',
-                        name:socket.webrtcname //当前名字
+                        name:socket.webrtcname, //当前名字
+                        isMobile:data.isMobile?true:false
                     }))
                 }
                 break;
