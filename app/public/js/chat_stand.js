@@ -28,7 +28,7 @@ let configuration = {
 // let remoteVideo = document.querySelector('#remoteVideo');
 
 // const socket = io.connect('http://192.168.1.103');
-const socket = io.connect('http://192.168.1.106:7001');
+const socket = io.connect('http://192.168.1.104:7001');
 console.log(socket)
 socket.on('connect', function () {
 

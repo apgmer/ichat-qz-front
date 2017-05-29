@@ -25,7 +25,7 @@ module.exports = appInfo => {
 
 
 
-    config.serverUrl = 'http://192.168.1.106:8090/api';
+    config.serverUrl = 'http://192.168.1.104:8090/api';
 
     // config.middleware = ['userAuth'];
 
