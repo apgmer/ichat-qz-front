@@ -137,7 +137,7 @@
 <script src="/public/js/init.js"></script>
 <script src="/public/socketio/socket.io-1.2.1.js"></script>
 <script src="/public/layer/layer.js"></script>
-<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=ec38ac6c94ec7a13cdacff6d33ea93d7"></script>
+<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.3&key=ec38ac6c94ec7a13cdacff6d33ea93d7"></script>
 <script src="/public/js/map.js"></script>
 
 <script>

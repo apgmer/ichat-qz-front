@@ -28,7 +28,9 @@ let configuration = {
 // let remoteVideo = document.querySelector('#remoteVideo');
 
 // const socket = io.connect('http://192.168.1.103');
-const socket = io.connect('http://192.168.1.104:7001');
+// const socket = io.connect('http://192.168.1.104:7001');
+const socket = io.connect('https://localhost');
+// const socket = io('http://localhost',{})
 console.log(socket)
 socket.on('connect', function () {
 
@@ -109,33 +111,6 @@ let handleRequest = function (jsonData) {
             name: jsonData.name
         })
         handleLogin(isLogin, function () {
-
-
-            // if (!jsonData.isMobile) {
-            //
-            //     let callToUsername = jsonData.name;
-            //
-            //     if (callToUsername.length > 0) {
-            //
-            //         connectedUser = callToUsername;
-            //
-            //         // create an offer
-            //         yourConn.createOffer(function (offer) {
-            //             console.log("create offer")
-            //             send({
-            //                 type: "offer",
-            //                 offer: offer
-            //             });
-            //
-            //             yourConn.setLocalDescription(offer);
-            //         }, function (error) {
-            //             alert("Error when creating an offer");
-            //         });
-            //
-            //
-            //     }
-            // }
-
 
         })
 
