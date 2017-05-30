@@ -71,6 +71,10 @@ socket.on('webrtcMsg', function (data) {
         case 'refuse':
             handlerRefuse();
             break;
+        case 'leave':
+            alert('对方已离开');
+            leaveAction();
+            break
 
     }
 });
@@ -105,6 +109,7 @@ let handleRequest = function (jsonData) {
 
 
             if (!jsonData.isMobile){
+
                 let callToUsername = jsonData.name;
 
                 if (callToUsername.length > 0) {
@@ -250,47 +255,6 @@ let handleLogin = function (success, callback) {
     }
 };
 
-// let handleOffer = function (offer, name) {
-//
-//
-//     if (!isCallTo) {
-//         audio.play();
-//         layer.confirm('您的好友请求与您视频通话，是否接受', function (index) {
-//             audio.pause()
-//             layer.close(index);
-//             startChat(name);
-//             handleLogin(isLogin, function (isDone) {
-//                 if (isDone) {
-//                     connectedUser = name;
-//                     yourConn.setRemoteDescription(new RTCSessionDescription(offer));
-//
-//                     //create an answer to an offer
-//                     yourConn.createAnswer(function (answer) {
-//                         yourConn.setLocalDescription(answer);
-//                         console.log('send answer')
-//                         send({
-//                             type: "answer",
-//                             answer: answer
-//                         });
-//
-//
-//                     }, function (error) {
-//                         console.log(error);
-//                         alert("Error when creating an answer");
-//                     });
-//
-//                 }
-//             })
-//         }, function (index) {
-//             layer.close(index)
-//             send({
-//                 name: name,
-//                 type: "refuse"
-//             });
-//         });
-//     }
-
-// };
 let handleOffer = function (offer, name) {
     console.log(offer)
 
@@ -349,4 +313,22 @@ let send = function (message) {
 
 //            conn.send(JSON.stringify(message));
 };
+var leave = function(){
+    send({
+        type: "leave"
+    });
+    leaveAction()
+}
+var leaveAction = function () {
+    var track = stream.getTracks()[0];  // if only one media track
+    track.stop();
+    remoteVideo.src = null
+    localVideo.src = null;
+    connectedUser = null;
+    yourConn.close();
+    yourConn.onicecandidate = null;
+    yourConn.onaddstream = null;
+    $('#chatPanel').empty();
+    location.reload()
+}
 

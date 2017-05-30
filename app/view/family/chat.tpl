@@ -152,7 +152,7 @@
             '</div>' +
             '</div>' +
             '<div class="card-action">' +
-            '<a href="#">挂断</a>' +
+            '<a href="javascript:leave()">挂断</a>' +
             '</div>' +
             '</div>'
 

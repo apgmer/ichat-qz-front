@@ -104,9 +104,14 @@ module.exports = () => {
                 }
                 break;
 
-            // case 'leave':
-            //     let s3 = _sockets[data.name];
-            //     break;
+            case 'leave':
+                let sl = _sockets[data.name];
+                if(null !== sl){
+                    sl.emit('webrtcMsg',JSON.stringify({
+                        type: "leave"
+                    }))
+                }
+                break;
 
 
         }
