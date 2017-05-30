@@ -5,7 +5,7 @@
 
 module.exports = () => {
     let _sockets = {};
-    return function* () {
+    return function*() {
         const message = this.args[0];
         // console.log('chat :', message + ' : ' + process.pid);
         // // const say = yield this.service.user.say();
@@ -16,44 +16,45 @@ module.exports = () => {
 
         console.log(message)
 
-        if(typeof message !== "object"){
-            try{
+        if (typeof message !== "object") {
+            try {
                 data = JSON.parse(message);
-            }catch (e){
+            } catch (e) {
                 console.log("json error");
                 data = {};
             }
-        }else{
+        } else {
             data = message
         }
 
-        switch (data.type){
+        switch (data.type) {
             case 'login':
                 let d = {
-                    type:"login",
-                    success:true
+                    type: "login",
+                    success: true
                 };
                 socket.webrtcname = data.name;
                 _sockets[data.name] = socket;
-                socket.emit('webrtcMsg',JSON.stringify(d));
+                socket.emit('webrtcMsg', JSON.stringify(d));
                 break;
 
             case 'request':
                 console.log(data.isMobile)
                 let sr = _sockets[data.name]
-                if (sr !== null){
-                    sr.emit('webrtcMsg',JSON.stringify({
-                        type:'request',
-                        name:socket.webrtcname, //当前名字
-                        isMobile:data.isMobile?true:false
+                if (sr !== null) {
+                    sr.emit('webrtcMsg', JSON.stringify({
+                        type: 'request',
+                        name: socket.webrtcname, //当前名字
+                        isMobile: data.isMobile ? true : false
                     }))
                 }
                 break;
             case 'ok':
                 let so = _sockets[data.name];
-                if(null !== so){
-                    so.emit('webrtcMsg',JSON.stringify({
-                        type: "ok"
+                if (null !== so) {
+                    so.emit('webrtcMsg', JSON.stringify({
+                        type: "ok",
+                        isMobile: data.isMobile
                     }))
                 }
                 break;
@@ -63,19 +64,19 @@ module.exports = () => {
                 // console.log("收到offer 如下")
                 // console.log(data)
                 let s = _sockets[data.name];
-                if (s !== null){
-                    s.emit('webrtcMsg',JSON.stringify({
-                        type:'offer',
-                        offer:data.offer,
-                        name:socket.webrtcname
+                if (s !== null) {
+                    s.emit('webrtcMsg', JSON.stringify({
+                        type: 'offer',
+                        offer: data.offer,
+                        name: socket.webrtcname
                     }))
                 }
                 break;
 
             case 'answer':
                 let s1 = _sockets[data.name];
-                if (null !== s1){
-                    s1.emit('webrtcMsg',JSON.stringify({
+                if (null !== s1) {
+                    s1.emit('webrtcMsg', JSON.stringify({
                         type: "answer",
                         answer: data.answer
                     }))
@@ -86,8 +87,8 @@ module.exports = () => {
                 console.log("收到candidate 如下")
                 console.log(data)
                 let s2 = _sockets[data.name];
-                if(null !== s2){
-                    s2.emit('webrtcMsg',JSON.stringify({
+                if (null !== s2) {
+                    s2.emit('webrtcMsg', JSON.stringify({
                         type: "candidate",
                         candidate: data.candidate
                     }))
@@ -97,8 +98,8 @@ module.exports = () => {
 
             case 'refuse':
                 let s3 = _sockets[data.name];
-                if(null !== s3){
-                    s3.emit('webrtcMsg',JSON.stringify({
+                if (null !== s3) {
+                    s3.emit('webrtcMsg', JSON.stringify({
                         type: "refuse"
                     }))
                 }
@@ -106,13 +107,21 @@ module.exports = () => {
 
             case 'leave':
                 let sl = _sockets[data.name];
-                if(null !== sl){
-                    sl.emit('webrtcMsg',JSON.stringify({
+                if (null !== sl) {
+                    sl.emit('webrtcMsg', JSON.stringify({
                         type: "leave"
                     }))
                 }
                 break;
-
+            case 'loc':
+                let sloc = _sockets[data.name];
+                if (null !== sloc) {
+                    sloc.emit('webrtcMsg', JSON.stringify({
+                        type: "loc",
+                        lat: data.lat,
+                        lon: data.lon
+                    }))
+                }
 
         }
 

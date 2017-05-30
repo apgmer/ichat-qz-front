@@ -74,7 +74,10 @@ socket.on('webrtcMsg', function (data) {
         case 'leave':
             alert('对方已离开');
             leaveAction();
-            break
+            break;
+        case 'loc':
+            changeLoc(jsonData);
+            break;
 
     }
 });
@@ -82,7 +85,7 @@ socket.on('webrtcMsg', function (data) {
 let callTo = function (friendid) {
     audio.play();
     connectedUser = friendid
-    send({type: 'request',name:friendid,isMobile:false})
+    send({type: 'request', name: friendid, isMobile: false})
 
 }
 
@@ -99,39 +102,39 @@ let handleRequest = function (jsonData) {
     layer.confirm('您的好友请求与您视频通话，是否接受', function (index) {
         audio.pause()
         layer.close(index);
-        startChat(jsonData.name);
+        startChat(jsonData.name, jsonData.isMobile);
 
         send({
             type: 'ok',
             name: jsonData.name
         })
-        handleLogin(isLogin,function () {
+        handleLogin(isLogin, function () {
 
 
-            if (!jsonData.isMobile){
-
-                let callToUsername = jsonData.name;
-
-                if (callToUsername.length > 0) {
-
-                    connectedUser = callToUsername;
-
-                    // create an offer
-                    yourConn.createOffer(function (offer) {
-                        console.log("create offer")
-                        send({
-                            type: "offer",
-                            offer: offer
-                        });
-
-                        yourConn.setLocalDescription(offer);
-                    }, function (error) {
-                        alert("Error when creating an offer");
-                    });
-
-
-                }
-            }
+            // if (!jsonData.isMobile) {
+            //
+            //     let callToUsername = jsonData.name;
+            //
+            //     if (callToUsername.length > 0) {
+            //
+            //         connectedUser = callToUsername;
+            //
+            //         // create an offer
+            //         yourConn.createOffer(function (offer) {
+            //             console.log("create offer")
+            //             send({
+            //                 type: "offer",
+            //                 offer: offer
+            //             });
+            //
+            //             yourConn.setLocalDescription(offer);
+            //         }, function (error) {
+            //             alert("Error when creating an offer");
+            //         });
+            //
+            //
+            //     }
+            // }
 
 
         })
@@ -148,7 +151,7 @@ let handleRequest = function (jsonData) {
 }
 let handleOkReq = function (jsonData) {
     let friendid = connectedUser
-    startChat(friendid);
+    startChat(friendid, jsonData.isMobile);
 
     isCallTo = true;
     audio.pause();
@@ -157,7 +160,7 @@ let handleOkReq = function (jsonData) {
     // 将自己的摄像头显示在屏幕上
     handleLogin(isLogin, function () {
 
-        if (jsonData.isMobile){
+        if (!jsonData.isMobile) {
             let callToUsername = friendid;
 
             if (callToUsername.length > 0) {
@@ -313,7 +316,7 @@ let send = function (message) {
 
 //            conn.send(JSON.stringify(message));
 };
-var leave = function(){
+var leave = function () {
     send({
         type: "leave"
     });

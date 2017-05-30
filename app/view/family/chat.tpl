@@ -107,10 +107,11 @@
                     bottom: 100px;
                     right: 25px;
                 }
+                #mapContainer {width:100%; height: 400px; }
             </style>
 
             <div class="col s9" id="chatPanel">
-
+                {#<div id="mapContainer" tabindex="0"></div>#}
             </div>
 
 
@@ -135,17 +136,18 @@
 <script src="/public/materialize/js/materialize.min.js"></script>
 <script src="/public/js/init.js"></script>
 <script src="/public/socketio/socket.io-1.2.1.js"></script>
-
 <script src="/public/layer/layer.js"></script>
+<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=ec38ac6c94ec7a13cdacff6d33ea93d7"></script>
+<script src="/public/js/map.js"></script>
 
 <script>
-    var startChat = function (uid) {
+    var startChat = function (uid,isMobile) {
         $('#chatPanel').empty();
         var name = $('#' + uid + '').text()
         var ele =
             '<div class="card grey darken-1">' +
             '<div class="card-content white-text">' +
-            '<span class="card-title">与 '+name+' 聊天中</span>' +
+            '<span class="card-title">与 ' + name + ' 聊天中</span>' +
             '<div class="video">' +
             '<video id="remoteVideo" class="remoteVideo" autoplay ></video>' +
             '<video id="localVideo" class="localVideo" autoplay  style="max-height: 412px;"></video>' +
@@ -157,6 +159,18 @@
             '</div>'
 
         $('#chatPanel').append(ele);
+        if (isMobile){
+            var mapElem = '<div class="card grey darken-1">' +
+                '<div class="card-content white-text">' +
+                '<span class="card-title"> ' + name + ' 的地理位置</span>' +
+                '<div id="mapContainer" tabindex="0">' +
+                '</div>' +
+                '</div>' +
+                '</div>'
+            $('#chatPanel').append(mapElem);
+            initMap()
+        }
+
     }
 </script>
 
