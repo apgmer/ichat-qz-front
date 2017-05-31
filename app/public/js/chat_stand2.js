@@ -29,7 +29,7 @@ let configuration = {
 
 // const socket = io.connect('http://192.168.1.103');
 // const socket = io.connect('http://192.168.1.104:7001');
-const socket = io.connect('https://localhost');
+const socket = io.connect('http://192.168.43.247:7001');
 // const socket = io('http://localhost',{})
 console.log(socket)
 socket.on('connect', function () {
@@ -237,6 +237,9 @@ let handleOffer = function (offer, name) {
     console.log(offer)
 
     connectedUser = name;
+    if (!yourConn) {
+        yourConn = new RTCPeerConnection(configuration);
+    }
     yourConn.setRemoteDescription(new RTCSessionDescription(offer));
 
     //create an answer to an offer
